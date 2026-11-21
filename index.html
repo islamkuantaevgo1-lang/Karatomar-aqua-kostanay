@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="kk"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Қаратомар Digital Twin</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4f8fb;--card:#fff;--tx:#10212e;--mu:#5b6f7e;--ac:#0b7bb5;--bd:#d9e4ec;--ok:#1b8a4b;--wn:#c47a00;--bad:#c62f2f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0c1822;--card:#142636;--tx:#e6f0f7;--mu:#93a9b9;--ac:#4cb6ea;--bd:#244056;--ok:#4cc27f;--wn:#f0b040;--bad:#f06a6a}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0c1822;--card:#142636;--tx:#e6f0f7;--mu:#93a9b9;--ac:#4cb6ea;--bd:#244056;--ok:#4cc27f;--wn:#f0b040;--bad:#f06a6a}
+html{scroll-padding-top:60px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:6px;overflow-x:auto;padding:8px 12px;background:var(--card);border-bottom:1px solid var(--bd)}
+nav a{white-space:nowrap;padding:8px 14px;border-radius:20px;color:var(--tx);text-decoration:none;font-size:14px;background:var(--bg)}
+nav a:active{background:var(--ac);color:#fff}
+header{padding:16px 14px 4px;max-width:900px;margin:auto}.logo{width:34px;height:34px;flex:none}
+h1{font-size:19px;margin:0 0 4px}h2{font-size:18px;margin:0 0 10px}
+p.s{color:var(--mu);margin:0;font-size:14px}
+main{max-width:900px;margin:auto;padding:10px 12px 40px;display:grid;gap:14px}
+section{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px}
+.g{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media(min-width:640px){.g{grid-template-columns:repeat(3,1fr)}}
+.k{background:var(--bg);border-radius:10px;padding:10px}
+.k b{display:block;font-size:22px}.k span{font-size:12px;color:var(--mu)}
+.k.ok b{color:var(--ok)}.k.wn b{color:var(--wn)}.k.bad b{color:var(--bad)}
+label{display:block;font-size:13px;color:var(--mu);margin-bottom:2px}
+input,select{width:100%;padding:11px;font-size:16px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx)}
+button,.btn{display:inline-block;padding:11px 16px;font-size:15px;border:0;border-radius:10px;background:var(--ac);color:#fff;cursor:pointer;text-decoration:none}
+button.sec{background:var(--bg);color:var(--tx);border:1px solid var(--bd)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tabs button{padding:7px 12px;font-size:13px;background:var(--bg);color:var(--tx);border:1px solid var(--bd)}
+.tabs button.on{background:var(--ac);color:#fff}
+.sc{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:520px}
+th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:right}th:first-child,td:first-child{text-align:left}
+.ai{border-left:4px solid var(--ac);background:var(--bg);padding:10px 12px;border-radius:8px;margin:8px 0;font-size:15px}
+.ai.w{border-color:var(--wn)}.ai.b{border-color:var(--bad)}.ai.o{border-color:var(--ok)}
+svg{width:100%;height:auto;display:block}
+.note{font-size:12px;color:var(--mu);margin-top:8px}
+details{border-bottom:1px solid var(--bd);padding:8px 0}summary{cursor:pointer}details p{margin:6px 0 0}
+#toast{position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));max-width:520px;margin:auto;background:var(--tx);color:var(--bg);padding:12px 14px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:9}#toast.on{opacity:1}
+.bd{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;color:#fff;margin-top:4px}.bd.l{background:var(--ok)}.bd.m{background:var(--wn)}.bd.h{background:var(--bad)}
+.gauge{height:14px;border-radius:8px;background:linear-gradient(90deg,var(--ok),var(--wn),var(--bad));position:relative;margin:10px 0 4px}.gauge i{position:absolute;top:-4px;width:6px;height:22px;border-radius:3px;background:var(--tx);transform:translateX(-3px)}
+.big{font-size:30px;font-weight:700}.th{font-size:16px;line-height:1.55}
+.rl{font-size:13px;font-weight:600;margin-top:8px;padding-left:7px;border-left:3px solid currentColor}
+.r0{color:var(--ok)}.r1{color:var(--wn)}.r2{color:var(--bad)}
+.tg{display:inline-block;padding:1px 8px;border-radius:6px;font-size:12px;font-weight:600;border:1px solid currentColor;white-space:nowrap}
+.seg{display:flex;border:1px solid var(--bd);border-radius:10px;overflow:hidden}.seg div{flex:1;text-align:center;padding:10px 4px;font-size:14px;color:var(--mu);background:var(--bg)}
+.seg div.on{color:#fff;font-weight:600}.seg div.on.r0{background:#2f7d5b}.seg div.on.r1{background:#a8741a}.seg div.on.r2{background:#a63d3d}
+td.w,th.w{white-space:normal;text-align:left}
+.sm{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;margin-bottom:10px}.sm b{font-size:17px}
+</style></head><body>
+<nav><a href="#ob">Шолу</a><a href="#rk">Қауіп</a><a href="#mp">Карта</a><a href="#in">Деректер</a><a href="#fc">Болжам</a><a href="#tb">База</a><a href="#hp">Анықтама</a></nav>
+<header style="display:flex;gap:12px;align-items:center"><svg class="logo" viewBox="0 0 64 64" aria-label="Логотип"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4cb6ea"/><stop offset="1" stop-color="#0b5f93"/></linearGradient></defs><circle cx="32" cy="32" r="31" fill="url(#lg)"/><ellipse cx="32" cy="32" rx="26" ry="9" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.8" transform="rotate(-25 32 32)"/><circle cx="52" cy="22" r="3.2" fill="#ffb020"/><path d="M32 12C26 22 21 28 21 36a11 11 0 0 0 22 0c0-8-5-14-11-24Z" fill="#fff"/><path d="M26 38c2 3 4 4 7 3" stroke="#0b5f93" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M12 50q5-3 10 0t10 0 10 0 10 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".85"/></svg><div><h1>Қаратомар · Digital Twin</h1>
+<p class="s">Қостанай облысы, Тобыл өзені · Спутниктік мониторинг + Databot + болжам</p><p class="note" id="db" style="margin:2px 0 0"></p></div></header>
+<main>
+<section id="ob"><h2>Алғашқы өлшемдер (соңғы жазба)</h2><div class="g" id="kp"></div>
+<p class="note">Бастапқы деректер — демонстрациялық үлгі. Өз өлшемдеріңізді қолмен енгізіңіз немесе Databot CSV файлын жүктеңіз.</p></section>
+
+<section id="rk"><h2>Қауіп деңгейі</h2><div id="rkv"></div><div id="rkf"></div></section>
+<section id="cc"><h2>Қорытынды</h2><div id="cv"></div></section>
+<section id="mp"><h2>Су қоймасының картасы</h2>
+<svg viewBox="0 0 400 220" role="img" aria-label="Қаратомар схемасы"><rect width="400" height="220" rx="10" fill="#1d3a2a"/><path d="M0 60C60 40 90 90 150 85S240 60 270 100 330 150 400 130V220H0Z" fill="#26482f" opacity=".6"/><path d="M20 110C70 70 130 95 170 105S250 75 300 95 345 125 372 140C340 160 280 150 240 140S130 150 80 140 10 125 20 110Z" fill="#1c7fb8" stroke="#6fd0ff" stroke-width="2"/><path d="M372 140C385 142 395 150 400 158" stroke="#6fd0ff" stroke-width="5" fill="none"/><path d="M0 100C8 104 14 108 20 110" stroke="#6fd0ff" stroke-width="5" fill="none"/><rect x="366" y="128" width="12" height="26" fill="#ddd" transform="rotate(10 372 140)"/><text x="190" y="125" fill="#fff" font-size="14" text-anchor="middle">Қаратомар су қоймасы</text><text x="340" y="120" fill="#fff" font-size="10">бөгет</text><text x="395" y="176" fill="#cfe" font-size="10" text-anchor="end">Тобыл өзені →</text><circle cx="190" cy="108" r="5" fill="#ffb020"/><text x="200" y="100" fill="#ffb020" font-size="10">Databot</text></svg>
+<div class="row"><a class="btn" id="gm" target="_blank" rel="noopener">🛰 Спутниктік карта (Google Maps)</a></div>
+<p class="note">Тірі спутниктік карта осы беттің ішінде жүктелмейді (сыртқы суреттерге рұқсат жоқ), сондықтан сілтемелер жаңа бетте ашылады. Нүктенің координаты шамамен берілген — Maps-та нақтылаңыз.</p></section>
+
+<section id="in"><h2>Деректер енгізу</h2>
+<div class="g"><div><label>Күні</label><input type="date" id="d"></div>
+<div><label>Су деңгейі, м</label><input type="number" step="any" id="level" inputmode="decimal"></div>
+<div><label>pH</label><input type="number" step="any" id="ph" inputmode="decimal"></div>
+<div><label>Температура, °C</label><input type="number" step="any" id="temp" inputmode="decimal"></div>
+<div><label>Лайлылық, NTU</label><input type="number" step="any" id="turb" inputmode="decimal"></div>
+<div><label>Еріген O₂, мг/л</label><input type="number" step="any" id="do" inputmode="decimal"></div></div>
+<div class="row"><button id="add">➕ Қосу және талдау</button>
+<button class="sec" onclick="document.getElementById('f').click()">📂 Databot CSV жүктеу</button>
+<button class="sec" id="tpl">⬇ CSV үлгісі</button><button class="sec" id="rs">Қалпына келтіру</button></div>
+<input type="file" id="f" accept=".csv,.txt" hidden>
+<p class="note">CSV бағандары: date, level, ph, temp, turb, do (үтір немесе нүктелі үтір). Бос өрістерге болады.</p></section>
+
+<section id="fc"><h2>Динамика және болжам</h2><div class="tabs" id="tabs"></div><div class="sc"><svg id="ch" viewBox="0 0 600 260"></svg></div>
+<div id="ai"></div></section>
+
+<section id="tb"><h2>Деректер базасы</h2>
+<div class="sm" id="sm"></div>
+<p class="note" style="margin:0 0 6px">Қорытынды статистика (*өзгеріс = соңғы мән − бірінші мән)</p>
+<div class="sc"><table id="st" style="min-width:420px"></table></div>
+<p class="note" style="margin:14px 0 6px">Барлық жазбалар (қауіп — әр жазбаның алдыңғысымен салыстырғандағы жалпы деңгейі)</p>
+<div class="sc"><table id="t"></table></div>
+<div class="row"><button class="sec" id="ex">⬇ Базаны CSV-ға жүктеу</button></div>
+<p class="note">Деректер бұлттық базада сақталады: бет жабылса да, басқа құрылғыдан ашсаңыз да жоғалмайды. Өзгерту (қосу/жою) құқығы тек бет иесінде.</p></section>
+<section id="hp"><h2>Көрсеткіштер не білдіреді?</h2>
+<details><summary><b>Су деңгейі (м)</b></summary><p class="note">Су қоймасындағы су бағанының биіктігі. Төмендеуі — су тапшылығы мен булану, күрт көтерілуі — тасқын қаупі. Қаратомар үшін шамамен 19 м ең жоғары тереңдікке жақын деп саналады.</p></details>
+<details><summary><b>pH</b></summary><p class="note">Судың қышқылдық-сілтілік деңгейі (0–14). Табиғи тұщы су үшін норма 6.5–8.5. Одан ауытқу балықтар мен су өсімдіктеріне зиян келтіреді.</p></details>
+<details><summary><b>Температура (°C)</b></summary><p class="note">Су жылыған сайын оттегі азаяды және балдырлар көп өседі («гүлдену»). 22–26 °C-тан жоғары болса, қауіп артады.</p></details>
+<details><summary><b>Лайлылық (NTU)</b></summary><p class="note">Судың мөлдірсіздігі: тозаң, саз, органикалық бөлшектер мөлшерін көрсетеді. Жоғарылауы — шөгіндінің шайылуы немесе ластану белгісі, ауызсу тазалауды қиындатады.</p></details>
+<details><summary><b>Еріген оттегі (мг/л)</b></summary><p class="note">Суда еріген O₂ мөлшері: тірі организмдер үшін аса маңызды. 6 мг/л-ден аз — ескерту, 4 мг/л-ден төмен — қауіпті (балықтың қырылуы мүмкін).</p></details>
+<details><summary><b>Қауіп деңгейі қалай есептеледі?</b></summary><p class="note">Әр көрсеткіш үшін 3 нәрсе қаралады: қазіргі мән нормадан қаншалықты ауытқыған, алдыңғы өлшемнен қаншалықты өзгерген, болжамды мән қалай болады. Ең нашар нәтиже алынады: 🟢 төмен, 🟡 орташа, 🔴 жоғары. Жалпы индекс 0–100.</p></details></section>
+</main><div id="toast" role="status"></div>
+<script>
+const P={level:{n:'Су деңгейі',u:'м'},ph:{n:'pH',u:''},temp:{n:'Температура',u:'°C'},turb:{n:'Лайлылық',u:'NTU'},do:{n:'Еріген O₂',u:'мг/л'}};
+const KEYS=Object.keys(P),RNG={level:[0,100],ph:[0,14],temp:[-5,45],turb:[0,1000],do:[0,20]};
+const BASE=[['2026-05-01',19.2,7.9,9,6.5,10.8],['2026-06-01',19.9,8.0,16,5.8,9.4],['2026-07-01',20.4,8.2,23,5.2,8.1],['2026-08-01',20.1,8.3,24,6.1,7.6],['2026-09-01',19.7,8.1,17,5.5,8.4],['2026-10-01',19.4,7.9,9,4.9,9.6]].map(r=>({d:r[0],level:r[1],ph:r[2],temp:r[3],turb:r[4],do:r[5]}));
+let real=[],data=BASE.slice(),demo=true,cur='level',col=null;
+const $=id=>document.getElementById(id);
+const C={lat:52.78,lon:63.05};
+$('gm').href=`https://www.google.com/maps/@${C.lat},${C.lon},12z/data=!3m1!1e3`;
+$('d').value=new Date().toISOString().slice(0,10);
+let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),3200)}
+const iso=ms=>isNaN(ms)?'':new Date(ms).toISOString().slice(0,10);
+function lsSave(){try{localStorage.setItem('kt2',JSON.stringify(real))}catch(e){}}
+function lsLoad(){try{const s=localStorage.getItem('kt2');if(s)return JSON.parse(s)}catch(e){}return[]}
+function setReal(a){real=a.filter(r=>r&&r.d);demo=!real.length;data=demo?BASE.slice():real.slice();render()}
+function status(k,v){if(v==null)return'';
+ if(k==='ph')return v<6.5||v>8.5?'bad':v>8.3||v<6.8?'wn':'ok';
+ if(k==='do')return v<4?'bad':v<6?'wn':'ok';
+ if(k==='temp')return v>26?'bad':v>22?'wn':'ok';
+ if(k==='turb')return v>10?'bad':v>6?'wn':'ok';
+ if(k==='level')return v<17?'bad':(v<18.5||v>24)?'wn':'ok';return''}
+const SV={ok:0,wn:1,bad:2,'':0};
+function series(k){return data.map((r,i)=>[i,r[k],r.d]).filter(p=>p[1]!=null&&!isNaN(p[1]))}
+function reg(pts){const n=pts.length;if(n<2)return null;const mx=pts.reduce((a,p)=>a+p[0],0)/n,my=pts.reduce((a,p)=>a+p[1],0)/n;let sx=0,sy=0;pts.forEach(p=>{sx+=(p[0]-mx)*(p[1]-my);sy+=(p[0]-mx)**2});const b=sy?sx/sy:0;return{b,a:my-b*mx}}
+function forecast(k,h=3){const r=reg(series(k).slice(-6).map(p=>[p[0],p[1]]));if(!r)return[];const last=data.length-1;return Array.from({length:h},(_,i)=>{const x=last+i+1;return[x,+(r.a+r.b*x).toFixed(2)]})}
+function nextDates(h){const ds=data.map(r=>new Date(r.d).getTime()).filter(x=>!isNaN(x));if(!ds.length)return Array(h).fill('');const step=ds.length>1?Math.max((ds[ds.length-1]-ds[0])/(ds.length-1),864e5):2592e6;return Array.from({length:h},(_,i)=>iso(ds[ds.length-1]+step*(i+1)))}
+// risk
+function riskAt(k,i,fc){const l=data[i];if(!l||l[k]==null)return null;let sc=SV[status(k,l[k])],why=[];
+ if(sc)why.push('мән нормадан ауытқыған');
+ let pv=null;for(let q=i-1;q>=0;q--)if(data[q][k]!=null){pv=data[q][k];break}
+ if(pv!=null){const d=l[k]-pv,pc=pv?Math.abs(d/pv*100):0;let c=0;
+  if(k==='ph')c=Math.abs(d)>.5?2:Math.abs(d)>.2?1:0;else if(k==='level')c=pc>5?2:pc>2?1:0;else c=pc>25?2:pc>10?1:0;
+  if(c)why.push('өзгеріс '+(c==2?'күрт':'байқалады'));sc=Math.max(sc,c)}
+ if(fc){const f=forecast(k);if(f[2]){const fs=SV[status(k,f[2][1])];if(fs>SV[status(k,l[k])])why.push('болжам нашарлауды көрсетеді');sc=Math.max(sc,fs)}}
+ return{sc,why}}
+const risk=k=>riskAt(k,data.length-1,true);
+const LB=['Төмен','Орташа','Жоғары'];
+function overallAt(i,fc){const rs=KEYS.map(k=>riskAt(k,i,fc)).filter(Boolean);if(!rs.length)return null;const mean=rs.reduce((a,r)=>a+r.sc,0)/rs.length,mx=Math.max(...rs.map(r=>r.sc));const idx=Math.round((mean/2*.6+mx/2*.4)*100);return{idx,lv:idx<25?0:idx<60?1:2}}
+const overall=()=>overallAt(data.length-1,true);
+function kpis(){const l=data[data.length-1]||{};$('kp').innerHTML=KEYS.map(k=>{const r=risk(k);return `<div class="k"><span>${P[k].n}</span><b>${l[k]??'—'} ${P[k].u}</b>${r?`<div class="rl r${r.sc}">Қауіп деңгейі: ${LB[r.sc]}</div>`:''}</div>`}).join('')+`<div class="k"><span>Соңғы жазба</span><b style="font-size:16px">${l.d||'—'}</b></div>`}
+function riskUI(){const o=overall();if(!o){$('rkv').innerHTML='<p class="note">Деректер жоқ.</p>';$('rkf').innerHTML='';return}
+ $('rkv').innerHTML=`<div class="seg">${LB.map((x,i)=>`<div class="${i===o.lv?'on r'+i:''}">${x}</div>`).join('')}</div><p class="note" style="margin-top:8px">Жалпы индекс: <b>${o.idx}/100</b> · 0–24 төмен, 25–59 орташа, 60–100 жоғары</p>`;
+ const l=data[data.length-1];
+ $('rkf').innerHTML='<div class="sc"><table style="min-width:440px"><tr><th>Көрсеткіш</th><th>Мәні</th><th>Қауіп</th><th class="w">Себебі</th></tr>'+KEYS.map(k=>{const r=risk(k);if(!r)return'';return `<tr><td>${P[k].n}</td><td>${l[k]} ${P[k].u}</td><td><span class="tg r${r.sc}">${LB[r.sc]}</span></td><td class="w">${r.why.length?r.why.join(', '):'тұрақты'}</td></tr>`}).join('')+'</table></div>'}
+function thesis(){const n=data.length,o=overall();if(n<2||!o){$('cv').innerHTML='<p class="note">Қорытынды үшін кемінде 2 жазба қажет.</p>';return}
+ const rs=KEYS.map(k=>({k,r:risk(k)})).filter(x=>x.r).sort((a,b)=>b.r.sc-a.r.sc);const top=rs[0],f=forecast('level');
+ const t=['Қаратомар су қоймасының жағдайы қазір тұрақты: көрсеткіштердің барлығы дерлік нормада, жақын болжамда елеулі қауіп күтілмейді.','Су қоймасының жағдайы бақылауды қажет етеді: кейбір көрсеткіштер нормадан ауытқып немесе тез өзгеріп жатыр, сондықтан өлшемді жиірек жүргізген жөн.','Су қоймасының экологиялық жағдайы қауіпті: көрсеткіштер нормадан айтарлықтай ауытқыды, шұғыл тексеру мен шара қабылдау қажет.'][o.lv];
+ let tail='';if(top&&top.r.sc>0)tail=` Басты назар аударатын фактор — ${P[top.k].n.toLowerCase()}.`;
+ if(f[2]&&data[n-1].level!=null){const d=f[2][1]-data[n-1].level;tail+=` Болжам бойынша су деңгейі ${Math.abs(d)<.15?'шамамен өзгермейді':d>0?'көтеріледі (тасқын қаупін қадағалау керек)':'төмендейді (су қорын үнемдеу керек)'}.`}
+ $('cv').innerHTML=`<p class="th"><b>Тезис:</b> ${t}${tail}</p><p class="note">Қорытынды енгізілген деректерге қарай автоматты түрде жаңарады. Тек ${n} жазбаға негізделген қарапайым тренд екенін ескеріңіз.</p>`}
+function chart(){const s=series(cur),f=forecast(cur);if(!s.length){$('ch').innerHTML='';return}
+ const all=s.map(p=>p[1]).concat(f.map(p=>p[1])),mn=Math.min(...all),mx=Math.max(...all),pad=(mx-mn||1)*.2,lo=mn-pad,hi=mx+pad,W=600,H=270,L=44,R=14,T=14,B=44,N=data.length+f.length-1||1;
+ const X=x=>L+(W-L-R)*x/N,Y=y=>T+(H-T-B)*(1-(y-lo)/(hi-lo));
+ let o='';for(let i=0;i<=4;i++){const v=lo+(hi-lo)*i/4,y=Y(v);o+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="var(--bd)"/><text x="${L-5}" y="${y+4}" text-anchor="end" font-size="11" fill="var(--mu)">${v.toFixed(1)}</text>`}
+ o+=`<polyline fill="none" stroke="var(--ac)" stroke-width="2.5" points="${s.map(p=>X(p[0])+','+Y(p[1])).join(' ')}"/>`+s.map(p=>`<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="3.5" fill="var(--ac)"/>`).join('');
+ if(f.length){const a=s[s.length-1];o+=`<polyline fill="none" stroke="var(--wn)" stroke-width="2.5" stroke-dasharray="6 5" points="${[[a[0],a[1]]].concat(f).map(p=>X(p[0])+','+Y(p[1])).join(' ')}"/>`+f.map(p=>`<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="3.5" fill="var(--wn)"/>`).join('')}
+ o+=`<text x="${L}" y="${H-24}" font-size="11" fill="var(--mu)">${data[0].d}</text><text x="${W-R}" y="${H-24}" font-size="11" text-anchor="end" fill="var(--mu)">→ ${nextDates(3)[2]}</text><text x="${L}" y="${H-6}" font-size="12" fill="var(--ac)">━ нақты</text><text x="${L+80}" y="${H-6}" font-size="12" fill="var(--wn)">┅ болжам</text>`;
+ $('ch').innerHTML=o}
+function advice(){const n=data.length;if(n<2){$('ai').innerHTML='<div class="ai">Болжам үшін кемінде 2 жазба қажет.</div>';return}
+ const out=[],ds=nextDates(3),l=data[n-1];
+ KEYS.forEach(k=>{if(l[k]==null)return;let p=null;for(let i=n-2;i>=0;i--)if(data[i][k]!=null){p=data[i];break}if(!p)return;
+  const d=l[k]-p[k],pc=p[k]?d/Math.abs(p[k])*100:0,f=forecast(k),e=f[2]?f[2][1]:null;
+  let cls='o',t=`<b>${P[k].n}:</b> алдыңғы өлшеммен (${p.d}) салыстырғанда ${d>=0?'+':''}${d.toFixed(2)} ${P[k].u} (${pc.toFixed(1)}%). `;
+  t+=Math.abs(pc)<3?'Өзгеріс шамалы, жүйе тұрақты. ':d>0?'Өсу тенденциясы байқалады. ':'Төмендеу тенденциясы байқалады. ';
+  if(e!=null)t+=`Тренд сақталса, ${ds[2]} шамасында ≈ ${e} ${P[k].u}. `;
+  const st=status(k,e!=null?e:l[k]);
+  if(k==='level'){if(pc<-2){cls='w';t+='Деңгей түсіп жатыр: ағызуды үнемдеген жөн.'}else if(pc>3){cls='w';t+='Деңгейдің жылдам көтерілуі — тасқын қаупін бақылаңыз.'}}
+  if(k==='ph'&&st!=='ok'){cls=st==='bad'?'b':'w';t+='pH ұсынылған 6.5–8.5 аралығының шетіне жақындады.'}
+  if(k==='do'&&st!=='ok'){cls=st==='bad'?'b':'w';t+='Оттегі аз: балықтар мен экожүйеге қауіп.'}
+  if(k==='temp'&&st!=='ok'){cls='w';t+='Су жылынуы балдырлардың «гүлденуін» арттырады.'}
+  if(k==='turb'&&st!=='ok'){cls='w';t+='Лайлылық жоғары: эрозия немесе шөгінді шайылуы мүмкін.'}
+  out.push(`<div class="ai ${cls}">${t}</div>`)});
+ $('ai').innerHTML=out.join('')+`<p class="note">Болжам — соңғы 6 өлшем бойынша сызықтық тренд.${n<4?' Жазба аз, сенімділік төмен.':''}</p>`}
+function table(){const n=data.length;if(!n)return;
+ const st=KEYS.map(k=>{const v=series(k).map(p=>p[1]);if(!v.length)return'';const a=v.reduce((x,y)=>x+y,0)/v.length,d=v[v.length-1]-v[0],r=risk(k);return `<tr><td>${P[k].n}</td><td>${Math.min(...v)}</td><td>${a.toFixed(2)}</td><td>${Math.max(...v)}</td><td>${v[v.length-1]}</td><td>${d>=0?'+':''}${d.toFixed(2)}</td><td><span class="tg r${r.sc}">${LB[r.sc]}</span></td></tr>`}).join('');
+ $('sm').innerHTML=`<div>Жазба: <b>${n}</b></div><div>Кезең: <b>${data[0].d} – ${data[n-1].d}</b></div><div>Күйі: <b>${demo?'демо':'нақты деректер'}</b></div>`;
+ $('st').innerHTML='<tr><th>Көрсеткіш</th><th>Мин</th><th>Орта</th><th>Макс</th><th>Соңғы</th><th>Өзгеріс*</th><th>Қауіп</th></tr>'+st;
+ $('t').innerHTML='<tr><th>Күні</th>'+KEYS.map(k=>`<th>${P[k].n}</th>`).join('')+'<th>Қауіп</th><th>Дереккөз</th><th></th></tr>'+data.map((r,i)=>{const o=overallAt(i,false);return `<tr><td>${r.d}</td>${KEYS.map(k=>`<td>${r[k]??'—'}</td>`).join('')}<td>${o?`<span class="tg r${o.lv}">${LB[o.lv]}</span>`:'—'}</td><td>${demo?'демо':r.src||'—'}</td><td>${demo?'':`<button class="sec" style="padding:2px 9px;color:var(--bad)" data-i="${i}" aria-label="Жою">✕</button>`}</td></tr>`}).join('')}
+$('ex').onclick=async()=>{if(demo)return toast('Алдымен нақты деректер енгізіңіз');const rows=['date,'+KEYS.join(',')+',risk,source'].concat(data.map((r,i)=>{const o=overallAt(i,false);return [r.d].concat(KEYS.map(k=>r[k]??'')).concat([o?LB[o.lv]:'',r.src||'']).join(',')}));
+ try{const dl=await claude.use('downloads');if(!dl)return toast('Жүктеп алу бұл жерде қолжетімсіз');await dl.save({filename:'karatomar_database.csv',data:'\uFEFF'+rows.join('\n')});toast('Файл дайын ✓')}catch(e){toast('Жүктеп алу тоқтатылды')}};
+function tabs(){$('tabs').innerHTML=KEYS.map(k=>`<button class="${k===cur?'on':''}" data-k="${k}">${P[k].n}</button>`).join('')}
+function render(){data.sort((a,b)=>a.d<b.d?-1:a.d>b.d?1:0);kpis();riskUI();thesis();tabs();chart();advice();table();
+ $('db').textContent=(col?'Тұрақты база қосылған':'Жергілікті режим: база қолжетімсіз, деректер осы құрылғыда')+(demo?' · демо деректер':' · '+real.length+' жазба')}
+$('tabs').onclick=e=>{const k=e.target.dataset.k;if(k){cur=k;tabs();chart()}};
+$('t').onclick=async e=>{const i=e.target.dataset.i;if(i==null)return;const d=data[+i].d;
+ try{if(col)await col.doc(d).delete()}catch(x){toast('Базадан жою қатесі');return}
+ setReal(real.filter(r=>r.d!==d));lsSave();toast('Жазба жойылды')};
+async function put(rows,src){rows.forEach(r=>{r.src=src;r.ts=new Date().toISOString()});const base=demo?[]:real.slice();rows.forEach(r=>{const j=base.findIndex(x=>x.d===r.d);if(j>=0)base.splice(j,1);base.push(r)});
+ let ok=true;if(col){try{await Promise.all(rows.map(r=>col.doc(r.d).set(r)))}catch(x){ok=false}}
+ setReal(base);lsSave();return ok}
+$('add').onclick=async()=>{const r={d:$('d').value};if(!r.d||isNaN(new Date(r.d)))return toast('Күнін таңдаңыз');let any=0;
+ for(const k of KEYS){const raw=$(k).value.trim().replace(',','.');if(raw==='')continue;const v=+raw;if(isNaN(v)||v<RNG[k][0]||v>RNG[k][1])return toast(`${P[k].n}: мән ${RNG[k][0]}–${RNG[k][1]} аралығында болуы керек`);r[k]=v;any=1}
+ if(!any)return toast('Кемінде бір мәнді енгізіңіз');
+ const ok=await put([r],'қолмен');KEYS.forEach(k=>$(k).value='');toast(ok?'Сақталды ✓':'Базаға жазу сәтсіз, құрылғыда сақталды');$('rk').scrollIntoView({behavior:'smooth'})};
+let rsT=0;$('rs').onclick=async()=>{if(!rsT){rsT=1;$('rs').textContent='Растау: барлық дерек жойылады';setTimeout(()=>{rsT=0;$('rs').textContent='Қалпына келтіру'},4000);return}
+ rsT=0;$('rs').textContent='Қалпына келтіру';try{if(col)await Promise.all(real.map(r=>col.doc(r.d).delete()))}catch(x){toast('Базаны тазалау қатесі')}
+ setReal([]);lsSave();toast('Деректер тазаланды')};
+$('tpl').onclick=()=>{const b=new Blob(['date,level,ph,temp,turb,do\n2026-11-01,19.3,7.9,6,5.0,10.2\n'],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='databot_template.csv';a.click()};
+const AL={date:'d',дата:'d',күні:'d',level:'level',деңгей:'level',уровень:'level',ph:'ph',temp:'temp',temperature:'temp',температура:'temp',turb:'turb',turbidity:'turb',лайлылық:'turb',мутность:'turb',do:'do',o2:'do',oxygen:'do',оттегі:'do',кислород:'do'};
+function pd(s){s=s.trim();let m=s.match(/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})/);if(m)return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;const t=new Date(s).getTime();return isNaN(t)?'':iso(t)}
+$('f').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onerror=()=>toast('Файлды оқу мүмкін болмады');rd.onload=async()=>{
+ const ls=rd.result.replace(/^\uFEFF/,'').split(/\r?\n/).filter(x=>x.trim());if(ls.length<2)return toast('Файл бос немесе тақырып қана бар');
+ const dl=ls[0].includes(';')?';':ls[0].includes('\t')?'\t':',';const hd=ls[0].split(dl).map(h=>AL[h.trim().replace(/"/g,'').toLowerCase()]);
+ if(!hd.includes('d'))return toast('«date» бағаны табылмады');const rows=[];
+ ls.slice(1).forEach(l=>{const v=l.split(dl),r={};hd.forEach((k,i)=>{if(!k||v[i]==null)return;const s=v[i].trim().replace(/"/g,'').replace(',','.');if(k==='d')r.d=pd(s);else if(s!==''&&!isNaN(+s)&&+s>=RNG[k][0]&&+s<=RNG[k][1])r[k]=+s});if(r.d&&Object.keys(r).length>1)rows.push(r)});
+ if(!rows.length)return toast('Жарамды жол табылмады');const ok=await put(rows,'Databot CSV');toast(rows.length+' жазба жүктелді'+(ok?'':' (тек құрылғыда)'))};rd.readAsText(f);e.target.value=''};
+// start: local first, then database
+setReal(lsLoad());
+(async()=>{try{if(!window.claude||!claude.use)return;const db=await Promise.race([claude.use('db'),new Promise(r=>setTimeout(()=>r(null),10000))]);if(!db)return;
+ col=db.collection('records');const loc=real.slice();
+ col.onSnapshot(s=>{const a=s.docs.map(d=>d.data());if(!a.length&&loc.length&&demo===false&&!window._mig){window._mig=1;loc.forEach(r=>col.doc(r.d).set(r).catch(()=>{}));return}setReal(a);lsSave()},()=>{col=null;render()})}catch(e){col=null}render()})();
+</script></body></html>
